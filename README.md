@@ -1,4 +1,4 @@
-# Website Moderator
+# Hosts Moderator
 
 **LAST LIST UPDATE: 2024-09-03**
 
