@@ -1,79 +1,79 @@
 #!/bin/bash
 
-# Este script bloqueia ou desbloqueia o acesso a sites específicos no Linux, 
-# utilizando o arquivo /etc/hosts para redirecionar domínios bloqueados para 127.0.0.1.
-# Ele foi adaptado para lidar com listas de sites no formato usado por StevenBlack/hosts.
-# Fonte: https://github.com/StevenBlack/hosts
+# This script blocks or unblocks access to specific websites on Linux, 
+# using the /etc/hosts file to redirect blocked domains to 127.0.0.1.
+# It has been adapted to handle site lists in the format used by StevenBlack/hosts.
+# Source: https://github.com/StevenBlack/hosts
 
-# Caminho para o arquivo /etc/hosts
+# Path to the /etc/hosts file
 HOSTS_FILE="/etc/hosts"
-# IP para redirecionar (localhost)
+# IP to redirect to (localhost)
 REDIRECT_IP="127.0.0.1"
-# Diretório base das categorias de sites a serem bloqueados
+# Base directory for site categories to be blocked
 CATEGORIES_DIR="categories"
 
-# Função para adicionar sites ao arquivo /etc/hosts
+# Function to add sites to the /etc/hosts file
 block_sites() {
     category="$1"
     category_file="$CATEGORIES_DIR/$category/list.txt"
     
-    # Verifica se o arquivo da categoria existe
+    # Check if the category file exists
     if [[ -f "$category_file" ]]; then
-        # Lê o arquivo linha por linha
+        # Read the file line by line
         while IFS= read -r line; do
-            # Ignora linhas de comentários ou linhas em branco
+            # Ignore comment lines or blank lines
             if [[ $line == \#* ]] || [[ -z "$line" ]]; then
                 continue
             fi
             
-            # Extrai o domínio da linha que começa com "0.0.0.0"
+            # Extract the domain from the line that starts with "0.0.0.0"
             domain=$(echo "$line" | awk '{print $2}')
             
-            # Verifica se o domínio já está no arquivo hosts
+            # Check if the domain is already in the hosts file
             if ! grep -q "$domain" "$HOSTS_FILE"; then
-                echo "Bloqueando $domain da categoria $category..."
-                # Adiciona o domínio ao arquivo hosts
+                echo "Blocking $domain from category $category..."
+                # Add the domain to the hosts file
                 echo "$REDIRECT_IP $domain" | sudo tee -a "$HOSTS_FILE" > /dev/null
             else
-                echo "$domain da categoria $category já está bloqueado."
+                echo "$domain from category $category is already blocked."
             fi
         done < "$category_file"
     else
-        echo "A categoria $category não existe."
+        echo "The category $category does not exist."
     fi
 }
 
-# Função para remover sites bloqueados do arquivo /etc/hosts
+# Function to remove blocked sites from the /etc/hosts file
 unblock_sites() {
     category="$1"
     category_file="$CATEGORIES_DIR/$category/sites_list.txt"
 
-    # Verifica se o arquivo da categoria existe
+    # Check if the category file exists
     if [[ -f "$category_file" ]]; then
         while IFS= read -r line; do
-            # Ignora linhas de comentários ou linhas em branco
+            # Ignore comment lines or blank lines
             if [[ $line == \#* ]] || [[ -z "$line" ]]; then
                 continue
             fi
             
-            # Extrai o domínio da linha que começa com "0.0.0.0"
+            # Extract the domain from the line that starts with "0.0.0.0"
             domain=$(echo "$line" | awk '{print $2}')
             
-            # Verifica se o domínio está no arquivo hosts
+            # Check if the domain is in the hosts file
             if grep -q "$domain" "$HOSTS_FILE"; then
-                echo "Desbloqueando $domain da categoria $category..."
-                # Remove o domínio do arquivo hosts
+                echo "Unblocking $domain from category $category..."
+                # Remove the domain from the hosts file
                 sudo sed -i".bak" "/$domain/d" "$HOSTS_FILE"
             else
-                echo "$domain da categoria $category não está bloqueado."
+                echo "$domain from category $category is not blocked."
             fi
         done < "$category_file"
     else
-        echo "A categoria $category não existe."
+        echo "The category $category does not exist."
     fi
 }
 
-# Função para bloquear ou desbloquear todas as categorias
+# Function to block or unblock all categories
 process_all_categories() {
     action="$1"
     
@@ -83,7 +83,7 @@ process_all_categories() {
     done
 }
 
-# Menu de opções
+# Options menu
 case "$1" in
     block)
         if [[ -n "$2" ]]; then
@@ -100,8 +100,8 @@ case "$1" in
         fi
         ;;
     *)
-        echo "Uso: $0 {block|unblock} [categoria]"
-        echo "Exemplo: $0 block social"
+        echo "Usage: $0 {block|unblock} [category]"
+        echo "Example: $0 block social"
         exit 1
         ;;
 esac

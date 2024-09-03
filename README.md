@@ -1,44 +1,85 @@
 # Website Moderator
 
-Este projeto em Shell Script permite bloquear e desbloquear o acesso a websites específicos no Linux, organizados em categorias. Ele utiliza o arquivo `/etc/hosts` para redirecionar os domínios bloqueados para `127.0.0.1`.
+**LAST LIST UPDATE: 2024-09-03**
 
-### Estrutura
+This project provides scripts for blocking and unblocking access to specific websites on both Linux and Windows. Sites are organized into categories and redirected to `127.0.0.1` by modifying the `hosts` file. 
 
-- `categories/`: Contém subpastas para cada categoria de sites (ex: `social`, `entertainment`, `news`...).
-- Cada subpasta contém um arquivo `list.txt` com a lista de sites a serem bloqueados naquela categoria.
+> [!NOTE]
+> The lists of sites are extracted from the repository [StevenBlack/hosts](https://github.com/StevenBlack/hosts?tab=readme-ov-file).
 
-### Como usar
+## Structure
 
-1. Adicione os sites que você deseja bloquear nos arquivos `list.txt` correspondentes em cada categoria.
-2. Execute o script `block_sites.sh` com as seguintes opções:
+- **`categories/`**: Contains subdirectories for each site category (e.g., `social`, `entertainment`, `news`, etc.).
+- Each subdirectory contains a `sites_list.txt` file with the list of sites to be blocked for that category.
 
-- **Bloquear todas as categorias**
+## Linux
+
+The Linux script is written in Shell Script and uses the `/etc/hosts` file to redirect blocked domains.
+
+### How to Use
+
+1. Add the sites you want to block to the `sites_list.txt` files in the appropriate category subdirectories.
+2. Run the `block_sites.sh` script with the following options:
+
+- **Block all categories**
     ```bash
     sudo ./block_sites.sh block
     ```
-- **Bloquear uma categoria específica**
+
+- **Block a specific category**
     ```bash
     sudo ./block_sites.sh block social
     ```
 
-- **Desbloquear todas as categorias**
+- **Unblock all categories**
     ```bash
     sudo ./block_sites.sh unblock
     ```
 
-- **Desbloquear uma categoria específica**
+- **Unblock a specific category**
     ```bash
     sudo ./block_sites.sh unblock social
     ```
 
 > [!IMPORTANT]
-> Este script requer permissões de superusuário para modificar o arquivo `/etc/hosts`. Por isso, pode ser necessário usar sudo ao executá-lo.
+> This script requires superuser permissions to modify the `/etc/hosts` file. Therefore, you may need to use `sudo` to run it.
 
+### How to Make the Script Executable
 
-### Como Permitir a Execução
-
-Siga os mesmos passos de antes para tornar o script executável:
+Run the following command to make the script executable:
 
 ```bash
 chmod +x block_sites.sh
 ```
+
+## Windows
+
+The Windows script is written in PowerShell and manipulates the `hosts` file located at `C:\Windows\System32\drivers\etc\hosts`.
+
+### How to Use
+
+1. Add the sites you want to block to the `sites_list.txt` files in the appropriate category subdirectories.
+2. Open PowerShell as Administrator and run the `block_sites.ps1` script with the following options:
+
+- **Block all categories**
+    ```powershell
+    .\block_sites.ps1 block
+    ```
+
+- **Block a specific category**
+    ```powershell
+    .\block_sites.ps1 block social
+    ```
+
+- **Unblock all categories**
+    ```powershell
+    .\block_sites.ps1 unblock
+    ```
+
+- **Unblock a specific category**
+    ```powershell
+    .\block_sites.ps1 unblock social
+    ```
+
+> [!IMPORTANT]
+> This script needs to be run as Administrator to modify the `hosts` file. Make sure to open PowerShell with elevated permissions.
