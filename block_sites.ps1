@@ -8,7 +8,7 @@ $hostsFile = "C:\Windows\System32\drivers\etc\hosts"
 # IP to redirect to (localhost)
 $redirectIP = "127.0.0.1"
 # Base directory for site categories to be blocked
-$categoriesDir = "categories"
+$categoriesDir = "src/categories"
 
 # Function to add sites to the hosts file
 function Block-Sites {

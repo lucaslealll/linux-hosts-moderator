@@ -10,7 +10,7 @@ HOSTS_FILE="/etc/hosts"
 # IP to redirect to (localhost)
 REDIRECT_IP="127.0.0.1"
 # Base directory for site categories to be blocked
-CATEGORIES_DIR="categories"
+CATEGORIES_DIR="src/categories"
 
 # Function to add sites to the /etc/hosts file
 block_sites() {
